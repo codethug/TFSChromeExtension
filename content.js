@@ -1,4 +1,3 @@
-
 chrome.runtime.sendMessage({method: "getLocalStorage"}, function(localStorage) {
 
 	console.group("TFS Extensions");
@@ -26,7 +25,10 @@ chrome.runtime.sendMessage({method: "getLocalStorage"}, function(localStorage) {
 			// do something to response
 			var jsonResult = JSON.parse(this.responseText);
 			var blockedItems = determineBlockedItems(jsonResult);
-			setBlockedItemsAsRed(blockedItems);
+			
+			waitForElementToExist('tile-' + blockedItems[0], function() {
+				setBlockedItemsAsRed(blockedItems);
+			});
 		};
 		
 		xmlhttp.send(data);
@@ -34,9 +36,8 @@ chrome.runtime.sendMessage({method: "getLocalStorage"}, function(localStorage) {
 	else
 	{
 		console.log("blockedAsRed disabled");
+		console.groupEnd();
 	}
-
-	console.groupEnd();
 });
 
 // returns: ["15", "30", "55"]
@@ -57,6 +58,29 @@ function determineBlockedItems(data)
 	var blockedIds = blockedItems.map(function(item) { return item[idColumnNumber]; });
 	
 	return blockedIds;
+}
+
+var maxAttempts = 5;
+var attemptsSoFar = 0;
+
+function waitForElementToExist(id, callback)
+{
+	if (attemptsSoFar === maxAttempts)
+	{
+		console.log("After " + maxAttempts + " attempts, we still can't find the appropriate DOM elements, so we're giving up");
+		console.groupEnd();
+		return;
+	}
+	attemptsSoFar++;
+
+	if (document.getElementById(id) == null)
+	{
+		console.error("element not found: " + id + ", will try again");
+		setTimeout(function() {
+			waitForElementToExist(id, callback);
+		}, 500);
+	}
+	callback();
 }
 
 function setBlockedItemsAsRed(itemArray)
