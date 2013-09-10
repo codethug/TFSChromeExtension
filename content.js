@@ -1,15 +1,23 @@
+
 chrome.runtime.sendMessage({method: "getLocalStorage"}, function(localStorage) {
+
+	console.group("TFS Extensions");
+	console.log("localStorage retrieved: %O", localStorage);
 
 	// Show blocked items as red
 	if (typeof localStorage.blockedAsRed !== "undefined" && localStorage.blockedAsRed !== "false")
 	{	
-		var allParentWorkItems = getAllParentWorkItemsOnBoard();
+		var allChildWorkItems = getAllChildWorkItemsOnBoard();
 		var token = document.getElementsByName("__RequestVerificationToken")[0].value;
 		
+		console.log("Child Work Items: %O", allChildWorkItems);
+		
 		var data = 
-			'workItemIds=' + allParentWorkItems.join() + // '50,45,32'
+			'workItemIds=' + allChildWorkItems.join() + // '50,45,32'
 			'&fields=System.Id%2CSystem.Title%2CBlocked' +
 			'&__RequestVerificationToken=' + token;
+
+		console.log("Query: %O", data);
 			
 		var xmlhttp=new XMLHttpRequest();
 		xmlhttp.open("POST", window.location.origin + '/DefaultCollection/_api/_wit/pageWorkItems?__v=4');
@@ -23,10 +31,16 @@ chrome.runtime.sendMessage({method: "getLocalStorage"}, function(localStorage) {
 		
 		xmlhttp.send(data);
 	}
+	else
+	{
+		console.log("blockedAsRed disabled");
+	}
+
+	console.groupEnd();
 });
 
 // returns: ["15", "30", "55"]
-function getAllParentWorkItemsOnBoard()
+function getAllChildWorkItemsOnBoard()
 {
 	var dataFromElement = JSON.parse(document.getElementsByClassName('aggregated-capacity-data')[0].textContent);
 	var idsAsObjectProperties = dataFromElement.previousValueData["Microsoft.VSTS.Scheduling.RemainingWork"];
