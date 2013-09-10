@@ -1,0 +1,21 @@
+{
+  "manifest_version": 2,
+
+  "name": "TFS Service Enhancements",
+  "description": "This extension enhances Team Foundation Service sites",
+  "version": "1.0",
+
+  "options_page": "options.html",
+  
+  "background": {
+	"scripts": ["eventpage.js"],
+	"persistent": false
+  },
+  
+  "permissions": [
+	"tabs",
+    "activeTab",
+	"storage",
+	"https://*.visualstudio.com/"
+  ]
+}
