@@ -17,5 +17,14 @@
     "activeTab",
 	"storage",
 	"https://*.visualstudio.com/"
+  ],
+  
+  "content_scripts": [
+	{
+		"matches": ["https://bondi.visualstudio.com/*"],
+		"css": [],
+		"js": ["content.js"],
+		"run_at": "document_end"
+	}
   ]
 }

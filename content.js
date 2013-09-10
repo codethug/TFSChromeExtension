@@ -1,3 +1,46 @@
+function injectedCode () {
+	
+	require(['Agile/Scripts/TFS.Agile.TaskBoard.View', "Presentation/Scripts/TFS/TFS.OM",
+		"Presentation/Scripts/TFS/Generated/TFS.WorkItemTracking.Constants",
+		"Agile/Scripts/TFS.Agile.Utils"], function(tb, t, m, G) {
+
+		var d = G.DatabaseCoreFieldRefName;
+		
+		tb.TaskBoardView.prototype._updateTileColors = function(e, f, b) {
+
+			var a = t.ColorsProvider.getDefault();
+			if (a.isWorkItemColorsDefined()) {
+				var d = this._getFormattedFieldValue(f, m.CoreFieldRefNames.WorkItemType);
+				var c = $(".tbTileContent", e);
+
+	//			if c.data("IsBlocked" || true)
+				if (true)
+				{
+					// Custom
+					c.css("border-left-color", "blue")
+				}
+				else
+				{
+					// OOTB
+					c.css("border-left-color", b ? a.getPrimaryWorkItemTypeColor(d) : "")
+				}
+
+				c.css("background-color",  b ? a.getSecondaryWorkItemTypeColor(d) : "");
+			}
+			
+		}
+
+	});
+
+}
+
+var script = document.createElement('script');
+script.setAttribute("async","async");
+script.appendChild(document.createTextNode('('+ injectedCode +')();'));
+(document.body || document.head || document.documentElement).appendChild(script);
+
+
+
 chrome.runtime.sendMessage({method: "getLocalStorage"}, function(localStorage) {
 
 	console.group("TFS Extensions");
@@ -60,7 +103,7 @@ function determineBlockedItems(data)
 	return blockedIds;
 }
 
-var maxAttempts = 5;
+var maxAttempts = 3;
 var attemptsSoFar = 0;
 
 function waitForElementToExist(id, callback)
