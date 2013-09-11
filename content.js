@@ -2,30 +2,32 @@ function injectedCode () {
 	
 	require(['Agile/Scripts/TFS.Agile.TaskBoard.View', "Presentation/Scripts/TFS/TFS.OM",
 		"Presentation/Scripts/TFS/Generated/TFS.WorkItemTracking.Constants",
-		"Agile/Scripts/TFS.Agile.Utils"], function(tb, t, m, G) {
+		"Agile/Scripts/TFS.Agile.Utils"], function(taskBoard, t, workItemConstants, agileUtils) {
 
-		var d = G.DatabaseCoreFieldRefName;
+		var coreFieldNames = agileUtils.DatabaseCoreFieldRefName;
+
+		debugger;
 		
-		tb.TaskBoardView.prototype._updateTileColors = function(e, f, b) {
+		taskBoard.TaskBoardView.prototype._updateTileColors = function(outerTileElement, taskId, tileMatchesFilter) {
+		
+			var colorsProvider = t.ColorsProvider.getDefault();
+			if (colorsProvider.isWorkItemColorsDefined()) {
+				var workItemType = this._getFormattedFieldValue(taskId, workItemConstants.CoreFieldRefNames.WorkItemType);
+				var innerTileElement = $(".tbTileContent", outerTileElement);
 
-			var a = t.ColorsProvider.getDefault();
-			if (a.isWorkItemColorsDefined()) {
-				var d = this._getFormattedFieldValue(f, m.CoreFieldRefNames.WorkItemType);
-				var c = $(".tbTileContent", e);
-
-	//			if c.data("IsBlocked" || true)
+	//			if innerTileElement.data("IsBlocked" || true)
 				if (true)
 				{
 					// Custom
-					c.css("border-left-color", "blue")
+					innerTileElement.css("border-left-color", "blue")
 				}
 				else
 				{
 					// OOTB
-					c.css("border-left-color", b ? a.getPrimaryWorkItemTypeColor(d) : "")
+					innerTileElement.css("border-left-color", tileMatchesFilter ? colorsProvider.getPrimaryWorkItemTypeColor(workItemType) : "")
 				}
 
-				c.css("background-color",  b ? a.getSecondaryWorkItemTypeColor(d) : "");
+				innerTileElement.css("background-color",  tileMatchesFilter ? colorsProvider.getSecondaryWorkItemTypeColor(workItemType) : "");
 			}
 			
 		}
