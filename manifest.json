@@ -3,7 +3,7 @@
 
   "name": "TFS Enhancements",
   "description": "This extension enhances Team Foundation Service sites",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "author": "Tim Larson, @codethug, http://codethug.com",
 
   "icons": {
