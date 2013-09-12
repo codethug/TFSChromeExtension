@@ -11,11 +11,41 @@ function injectedCode () {
 
 		var workItems = Object.keys(model.payload.data);
 		var query = generateQuery(workItems, ['Blocked']);
-
+		
 		getData(query, function(result){
 			updateModel(model, result);
 			modelScript.html(JSON.stringify(model));
 		}, true);
+	}
+
+	if (true || extensionSettings.bugBackgroundColor)
+	{
+		var colorsScript = $(".workitemype-colors").eq(0);
+		var defaultColors = JSON.parse(colorsScript.html());
+
+		var parentBugColor = {
+			"PrimaryColor":"FFF2CB1D",
+			"SecondaryColor":"FBB",
+			"WorkItemTypeName":"Task"		
+		}
+
+		// Add bug color back to array
+		defaultColors.push(parentBugColor);
+
+		// Push data back into DOM
+		colorsScript.html(JSON.stringify(defaultColors));
+	}
+	
+	function spliceByProperty(data, propertyName, propertyValue)
+	{
+		var result = null;
+		for (var i = 0; i < data.length; i++){
+			if (data[i][propertyName] === propertyValue){
+				result = data.splice(i, 1)[0]; // Remove 1 element at position i
+				break; // out of for loop
+			}
+		}
+		return result;
 	}
 	
 	function generateQuery(workItems, fields)
@@ -72,6 +102,7 @@ function injectedCode () {
 		"Presentation/Scripts/TFS/Generated/TFS.WorkItemTracking.Constants",
 		"Agile/Scripts/TFS.Agile.Utils"], function(taskBoard, taskBoardView, t, workItemConstants, agileUtils) {
 
+	
 		var coreFieldNames = agileUtils.DatabaseCoreFieldRefName;
 
 		taskBoard.TaskBoard.prototype.getModel = function()
@@ -85,13 +116,14 @@ function injectedCode () {
 		
 			var colorsProvider = t.ColorsProvider.getDefault();
 			if (colorsProvider.isWorkItemColorsDefined()) {
+
 				var workItemType = this._getFormattedFieldValue(taskId, workItemConstants.CoreFieldRefNames.WorkItemType);
 
 				var isBlocked = (extensionSettings.blockedAsRed === "true") && 
 								(this._getFormattedFieldValue(taskId, "Microsoft.VSTS.CMMI.Blocked") === "Yes");
 				
 				var innerTileElement = $(".tbTileContent", outerTileElement);
-		
+
 				if (isBlocked)
 				{
 					// Custom

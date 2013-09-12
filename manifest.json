@@ -1,10 +1,15 @@
 {
   "manifest_version": 2,
 
-  "name": "TFS Service Enhancements",
+  "name": "TFS Enhancements",
   "description": "This extension enhances Team Foundation Service sites",
   "version": "1.0",
+  "author": "Tim Larson, @codethug, http://codethug.com",
 
+  "icons": {
+	"128": "Visual Studio 2012-128.png"
+  },
+  
   "options_page": "options.html",
   
   "background": {

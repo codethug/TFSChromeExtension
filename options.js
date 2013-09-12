@@ -16,7 +16,10 @@ function save_options() {
 // Restores select box state to saved value from localStorage.
 function restore_options() {
   var blockedAsRed = localStorage["blockedAsRed"];
-  blockedAsRed = (typeof blockedAsRed === "undefined" || blockedAsRed === "false") ? false : blockedAsRed;
+  blockedAsRed = 
+	typeof blockedAsRed === "undefined" ? true :
+		blockedAsRed === "false" ? false :
+			blockedAsRed;
   document.getElementById("blockedAsRed").checked = blockedAsRed;
 }
 
