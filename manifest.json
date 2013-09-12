@@ -3,7 +3,7 @@
 
   "name": "TFS Enhancements",
   "description": "This extension enhances Team Foundation Service sites",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "author": "Tim Larson, @codethug, http://codethug.com",
 
   "icons": {
@@ -26,7 +26,7 @@
   
   "content_scripts": [
 	{
-		"matches": ["https://bondi.visualstudio.com/*"],
+		"matches": ["https://*.visualstudio.com/*"],
 		"css": [],
 		"js": ["content.js"],
 		"run_at": "document_end"
