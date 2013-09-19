@@ -13,7 +13,7 @@
   "options_page": "options.html",
   
   "background": {
-	"scripts": ["eventpage.js"],
+	"scripts": ["settings.js", "eventpage.js"],
 	"persistent": false
   },
   

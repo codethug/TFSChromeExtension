@@ -3,7 +3,7 @@ function injectedCode () {
 	var settingsTag = $("#tfsExtensionSettings").eq(0);
 	var extensionSettings = JSON.parse(settingsTag.html());
 	
-	if (extensionSettings.blockedAsRed === "true")
+	if (extensionSettings.blockedAsRed)
 	{
 		var modelScript = $("#taskboard script").eq(0);
 		var model = JSON.parse(modelScript.html());
@@ -96,34 +96,20 @@ function injectedCode () {
 	}
 
 	require([
-		'Agile/Scripts/TFS.Agile.TaskBoard', 
-		'Agile/Scripts/TFS.Agile.TaskBoard.View', 
+		"Agile/Scripts/TFS.Agile.TaskBoard.View", 
 		"Presentation/Scripts/TFS/TFS.OM",
 		"Presentation/Scripts/TFS/Generated/TFS.WorkItemTracking.Constants",
-		"Agile/Scripts/TFS.Agile.Utils"], function(taskBoard, taskBoardView, t, workItemConstants, agileUtils) {
-
-	
-		var coreFieldNames = agileUtils.DatabaseCoreFieldRefName;
-
-		taskBoard.TaskBoard.prototype.getModel = function()
-		{
-			return this._model;
-		}
-
-		var foo = taskBoard.TaskBoard.prototype.getModel();
+		], function(taskBoardView, tfs, workItemConstants) {
 
 		taskBoardView.TaskBoardView.prototype._updateTileColors = function(outerTileElement, taskId, tileMatchesFilter) {
-		
-			var colorsProvider = t.ColorsProvider.getDefault();
+			var colorsProvider = tfs.ColorsProvider.getDefault();
 			if (colorsProvider.isWorkItemColorsDefined()) {
-
 				var workItemType = this._getFormattedFieldValue(taskId, workItemConstants.CoreFieldRefNames.WorkItemType);
 
-				var isBlocked = (extensionSettings.blockedAsRed === "true") && 
-								(this._getFormattedFieldValue(taskId, "Microsoft.VSTS.CMMI.Blocked") === "Yes");
+				var isBlocked = extensionSettings.blockedAsRed && 
+					(this._getFormattedFieldValue(taskId, "Microsoft.VSTS.CMMI.Blocked") === "Yes");
 				
 				var innerTileElement = $(".tbTileContent", outerTileElement);
-
 				if (isBlocked)
 				{
 					// Custom

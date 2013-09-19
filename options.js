@@ -2,8 +2,9 @@
 
 // Saves options to localStorage.
 function save_options() {
-  var blockedAsRed = document.getElementById("blockedAsRed").checked;
-  localStorage["blockedAsRed"] = blockedAsRed;
+  var settings = {};
+  settings.blockedAsRed = document.getElementById("blockedAsRed").checked;
+  settingsHelper.saveSettings(settings);
  
   // Update status to let user know options were saved.
   var status = document.getElementById("status");
@@ -15,12 +16,8 @@ function save_options() {
 
 // Restores select box state to saved value from localStorage.
 function restore_options() {
-  var blockedAsRed = localStorage["blockedAsRed"];
-  blockedAsRed = 
-	typeof blockedAsRed === "undefined" ? true :
-		blockedAsRed === "false" ? false :
-			blockedAsRed;
-  document.getElementById("blockedAsRed").checked = blockedAsRed;
+  var settings = settingsHelper.getSettings(); // from settings.js
+  document.getElementById("blockedAsRed").checked = settings.blockedAsRed;
 }
 
 document.addEventListener('DOMContentLoaded', restore_options);
