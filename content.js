@@ -18,7 +18,7 @@ function injectedCode () {
 		}, true);
 	}
 
-	if (true || extensionSettings.bugBackgroundColor)
+	if (extensionSettings.bugBackgroundColor)
 	{
 		var colorsScript = $(".workitemype-colors").eq(0);
 		var defaultColors = JSON.parse(colorsScript.html());
@@ -27,7 +27,7 @@ function injectedCode () {
 			"PrimaryColor":"FFF2CB1D",
 			"SecondaryColor":"FBB",
 			"WorkItemTypeName":"Task"		
-		}
+		};
 
 		// Add bug color back to array
 		defaultColors.push(parentBugColor);
@@ -65,7 +65,7 @@ function injectedCode () {
 			
 	function getData(query, callback, synchronous)
 	{
-		if (typeof synchronous === "undefined" || synchronous == null) { synchronous = false; }
+		if (typeof synchronous === "undefined" || synchronous === null) { synchronous = false; }
 
 		var xmlhttp=new XMLHttpRequest();
 		xmlhttp.open("POST", window.location.origin + '/DefaultCollection/_api/_wit/pageWorkItems?__v=4', !synchronous);
@@ -113,18 +113,18 @@ function injectedCode () {
 				if (isBlocked)
 				{
 					// Custom
-					innerTileElement.css("border-left-color", "Red")
+					innerTileElement.css("border-left-color", "Red");
 				}
 				else
 				{
 					// OOTB
-					innerTileElement.css("border-left-color", tileMatchesFilter ? colorsProvider.getPrimaryWorkItemTypeColor(workItemType) : "")
+					innerTileElement.css("border-left-color", tileMatchesFilter ? colorsProvider.getPrimaryWorkItemTypeColor(workItemType) : "");
 				}
 
 				innerTileElement.css("background-color",  tileMatchesFilter ? colorsProvider.getSecondaryWorkItemTypeColor(workItemType) : "");
 			}
 			
-		}
+		};
 
 	});
 	
